@@ -331,7 +331,10 @@ class DictFileReader(object):
         read_size = 0
         start_offset = self._offset
         while read_size < size:
-            type_identifier = struct.unpack("!c")
+            type_identifier, = struct.unpack("!c", self._dict_file[self._offset:self._offset+1])
+            self._offset += 1
+            # type_identifier = str(type_identifier)
+            # print(type_identifier)
             if type_identifier in "mlgtxykwhnr":
                 result[type_identifier] = self._get_entry_field_null_trail()
             else:
@@ -366,7 +369,7 @@ class DictFileReader(object):
     def _get_entry_field_size(self, size=None):
         # for the 'W' 'P' case
         if size is None:
-            size = struct.unpack("!I", self._dict_file[self._offset:self._offset + 4])
+            size, = struct.unpack("!I", self._dict_file[self._offset:self._offset + 4])
             self._offset += 4
         result = self._dict_file[self._offset:self._offset + size]
         self._offset += size
@@ -383,9 +386,13 @@ if __name__ == '__main__':
     # idx_file = "/tmp/stardict-xiandaihanyucidian_fix-2.4.2/xiandaihanyucidian_fix.idx"
     # dict_file = "/tmp/stardict-xiandaihanyucidian_fix-2.4.2/xiandaihanyucidian_fix.dict.dz"
 
-    ifo_file = "/tmp/stardict-xhzd-2.4.2/xhzd.ifo"
-    idx_file = "/tmp/stardict-xhzd-2.4.2/xhzd.idx"
-    dict_file = "/tmp/stardict-xhzd-2.4.2/xhzd.dict.dz"
+    # ifo_file = "/tmp/stardict-xhzd-2.4.2/xhzd.ifo"
+    # idx_file = "/tmp/stardict-xhzd-2.4.2/xhzd.idx"
+    # dict_file = "/tmp/stardict-xhzd-2.4.2/xhzd.dict.dz"
+
+    ifo_file = "/tmp/stardict-xdict-ec-gb-2.4.2/xdict-ec-gb.ifo"
+    idx_file = "/tmp/stardict-xdict-ec-gb-2.4.2/xdict-ec-gb.idx"
+    dict_file = "/tmp/stardict-xdict-ec-gb-2.4.2/xdict-ec-gb.dict.dz"
 
     # info read test done
     info = IfoFileReader(ifo_file)
@@ -393,7 +400,8 @@ if __name__ == '__main__':
 
     # index read test
     index = IdxFileReader(idx_file)
+    # index.dump_word()
 
     # dict test
     dict_reader = DictFileReader(dict_file, info, index, True)
-    dict_reader.dump("/tmp/test3.txt")
+    dict_reader.dump("/tmp/test4.txt")
