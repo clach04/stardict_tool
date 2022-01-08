@@ -307,11 +307,13 @@ class DictFileReader(object):
                 #print(repr(w))
                 out_encoding = 'utf-8'  # force/assume encoding to UTF8, no config
                 f.write(w)
-                f.write(b':')
+                f.write(b'\t')
                 for m in meaning_lst:
-                    f.write(b" ".join(m.values()))
-                    f.write(b" ")
-                f.write(b'\n------\n')
+                    meaning_bytes = b" ".join(m.values())
+                    meaning_bytes = meaning_bytes.replace(b'\n', b'\\n')  # replace
+                    #meaning_bytes = meaning_bytes.replace(b'\n', b'')  # remove
+                    f.write(meaning_bytes)
+                f.write(b'\n')
 
     def get_dict_by_index(self, index):
         """Get the word's dictionary data by it's index infomation.
