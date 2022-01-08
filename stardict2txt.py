@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 import struct
+import sys
 import gzip
 
 
@@ -384,6 +385,7 @@ class DictFileReader(object):
 
 
 if __name__ == '__main__':
+    print('Python %s on %s' % (sys.version, sys.platform))
     # download stardict dictionary from: http://kdr2.com/resource/stardict.html
     # ifo_file = "/tmp/stardict-HanYuChengYuCiDian-new_colors-2.4.2/HanYuChengYuCiDian-new_colors.ifo"
     # idx_file = "/tmp/stardict-HanYuChengYuCiDian-new_colors-2.4.2/HanYuChengYuCiDian-new_colors.idx"
