@@ -39,7 +39,7 @@ class IfoFileReader(object):
         May raise IfoFileException during initialization.
         """
         self._ifo = dict()
-        with open(filename, "r") as ifo_file:
+        with open(filename, "rb") as ifo_file:
             self._ifo["dict_title"] = ifo_file.readline().strip()  # dictionary title
             line = ifo_file.readline()  # version info
             key, equal, value = line.partition("=")
@@ -106,7 +106,7 @@ class IdxFileReader(object):
             with gzip.open(filename, "rb") as index_file:
                 self._content = index_file.read()
         else:
-            with open(filename, "r") as index_file:
+            with open(filename, "rb") as index_file:
                 self._content = index_file.read()
         self._offset = 0
         self._index = 0
@@ -213,7 +213,7 @@ class SynFileReader(object):
         - `filename`: The filename of .syn file of stardict.
         """
         self._syn = dict()
-        with open(filename, "r") as syn_file:
+        with open(filename, "rb") as syn_file:
             content = syn_file.read()
         offset = 0
         while offset < len(content):
