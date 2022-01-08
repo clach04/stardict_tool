@@ -1,7 +1,6 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 import struct
-import types
 import gzip
 
 
@@ -39,7 +38,7 @@ class IfoFileReader(object):
         May raise IfoFileException during initialization.
         """
         self._ifo = dict()
-        with open(filename, "rb") as ifo_file:
+        with open(filename, "r") as ifo_file:
             self._ifo["dict_title"] = ifo_file.readline().strip()  # dictionary title
             line = ifo_file.readline()  # version info
             key, equal, value = line.partition("=")
@@ -116,7 +115,7 @@ class IdxFileReader(object):
         for word_str, word_data_offset, word_data_size, index in self:
             self._index_idx.append((word_str, word_data_offset, word_data_size))
             if word_str in self._word_idx:
-                if isinstance(self._word_idx[word_str], types.ListType):
+                if isinstance(self._word_idx[word_str], list):
                     self._word_idx[word_str].append(len(self._index_idx) - 1)
                 else:
                     self._word_idx[word_str] = [self._word_idx[word_str], len(self._index_idx) - 1]
@@ -132,6 +131,10 @@ class IdxFileReader(object):
         """
         return self
 
+    def __next__(self):
+        # py3 call to py2 interface - so as to support both
+        return self.next()
+
     def next(self):
         """Define the iterator interface.
 
@@ -140,7 +143,7 @@ class IdxFileReader(object):
             raise StopIteration
         word_data_offset = 0
         word_data_size = 0
-        end = self._content.find("\0", self._offset)
+        end = self._content.find(b"\0", self._offset)
         # word_str process
         word_str = self._content[self._offset:end]
         self._offset = end + 1
@@ -187,7 +190,7 @@ class IdxFileReader(object):
             return False
         number = self._word_idx[word_str]
         index = list()
-        if isinstance(number, types.ListType):
+        if isinstance(number, list):
             for n in number:
                 index.append(self._index_idx[n][1:])
         else:
@@ -224,7 +227,7 @@ class SynFileReader(object):
                                                 content[offset, offset + 4])
             offset += 4
             if synonym_word in self._syn:
-                if isinstance(self._syn[synonym_word], types.ListType):
+                if isinstance(self._syn[synonym_word], list):
                     self._syn[synonym_word].append(original_word_index)
                 else:
                     self._syn[synonym_word] = [self._syn[synonym_word],
@@ -294,19 +297,21 @@ class DictFileReader(object):
 
     def dump(self, save_file):
         """"dump all word"""
-        with open(save_file, 'w+') as f:
+        with open(save_file, 'wb+') as f:
             for w in self._dict_index._word_idx:
                 meaning_lst = self.get_dict_by_word(w)
                 # print('--------------------------------')
                 # print(w)
                 # print(self.get_dict_by_word(w))
                 # print('--------------------------------')
+                #print(repr(w))
+                out_encoding = 'utf-8'  # force/assume encoding to UTF8, no config
                 f.write(w)
-                f.write(':')
+                f.write(b':')
                 for m in meaning_lst:
-                    f.write(" ".join(m.values()))
-                    f.write(" ")
-                f.write('\n------\n')
+                    f.write(b" ".join(m.values()))
+                    f.write(b" ")
+                f.write(b'\n------\n')
 
     def get_dict_by_index(self, index):
         """Get the word's dictionary data by it's index infomation.
