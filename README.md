@@ -6,7 +6,10 @@ stardict2txt and info
 
 stardict2txt.py from rongyi - https://gist.github.com/rongyi/ff2f8a1a82cddb2efc9239bb0d7ca78b
 
-Original stardict2txt.py is Python 2 only.
+Python 3 version, original stardict2txt.py is Python 2 only (however python 3 version appears to be more robust, sorting works when ran under Python 3).
+
+
+Tested with "GNU Collaborative International Dictionary of English" from http://build.koreader.rocks/download/dict/
 
 ## Stardict info and other tools/libs
 
