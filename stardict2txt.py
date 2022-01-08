@@ -196,7 +196,7 @@ class IdxFileReader(object):
 
     def dump_word(self):
         for word_str in index._word_idx:
-            print word_str, ": ", index.get_index_by_word(word_str)
+            print(word_str, ": ", index.get_index_by_word(word_str))
 
 
 class SynFileReader(object):
