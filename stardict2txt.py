@@ -390,9 +390,12 @@ if __name__ == '__main__':
     # idx_file = "/tmp/stardict-xhzd-2.4.2/xhzd.idx"
     # dict_file = "/tmp/stardict-xhzd-2.4.2/xhzd.dict.dz"
 
-    ifo_file = "/tmp/stardict-xdict-ec-gb-2.4.2/xdict-ec-gb.ifo"
-    idx_file = "/tmp/stardict-xdict-ec-gb-2.4.2/xdict-ec-gb.idx"
-    dict_file = "/tmp/stardict-xdict-ec-gb-2.4.2/xdict-ec-gb.dict.dz"
+    dict_name = 'xdict-ec-gb'
+    dict_name = 'stardict'
+    ifo_file = dict_name + ".ifo"
+    idx_file = dict_name + ".idx"
+    dict_file = dict_name + ".dict.dz"
+    text_file = dict_name + ".txt"
 
     # info read test done
     info = IfoFileReader(ifo_file)
@@ -404,4 +407,4 @@ if __name__ == '__main__':
 
     # dict test
     dict_reader = DictFileReader(dict_file, info, index, True)
-    dict_reader.dump("/tmp/test4.txt")
+    dict_reader.dump(text_file)
